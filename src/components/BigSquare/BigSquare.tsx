@@ -4,71 +4,97 @@ import { THREE_BY_THREE_ARRAY } from "../../constants";
 import { calculateWin } from "../../helpers/game.helpers";
 import { TurnContext, TurnContextType } from "../App";
 import { NextValidSquareContext, NextValidSquareContextType } from "../App";
+
+import { X, Circle } from "react-feather";
+
 export type BigSquareProps = {
   bigSquareOccupied: (id: number) => string | null;
   calculateGameResults: (i: number, winner: string) => void;
   bigSquareId: number;
+  newGame: boolean;
+  gameWinner: string | null;
 };
 
 function BigSquare({
   bigSquareOccupied,
   calculateGameResults,
   bigSquareId,
+  newGame,
+  gameWinner,
 }: BigSquareProps) {
-  const [smallSquares, setSmallSquares] = React.useState(Array(9).fill(null));
+  const [smallSquaresArray, setSmallSquaresArray] = React.useState(
+    Array(9).fill(null)
+  );
   const { xIsNext, setXIsNext } =
     React.useContext<TurnContextType>(TurnContext);
   const { nextValidSquare, setNextValidSquare } =
     React.useContext<NextValidSquareContextType>(NextValidSquareContext);
 
+  React.useEffect(() => {
+    if (newGame) {
+      setSmallSquaresArray(Array(9).fill(null));
+    }
+  }, [newGame]);
+
   function handleClick(id: number, bigSquareId: number) {
     if (
-      smallSquares[id] || // check if SmallSquare is already taken
+      smallSquaresArray[id] || // check if SmallSquare is already taken
       bigSquareOccupied(bigSquareId) || // check if the BigSquare the SmallSquare belongs to is already taken
-      (nextValidSquare !== null && nextValidSquare !== bigSquareId) // checking that the SmallSquare is part of the currently valid BigSquare
+      (nextValidSquare !== null && nextValidSquare !== bigSquareId) || // checking that the SmallSquare is part of the currently valid BigSquare
+      gameWinner !== null
     ) {
       return;
     }
 
-    // updating smallSquares state
-    const nextSmallSquares: Array<string | null> = [...smallSquares];
+    // updating smallSquaresArray state
+    const nextSmallSquaresArray: Array<string | null> = [...smallSquaresArray];
     if (xIsNext) {
-      nextSmallSquares[id] = "X";
+      nextSmallSquaresArray[id] = "X";
     } else {
-      nextSmallSquares[id] = "O";
+      nextSmallSquaresArray[id] = "O";
     }
-    setSmallSquares(nextSmallSquares);
+    setSmallSquaresArray(nextSmallSquaresArray);
 
     // switch turn order at turn end
     setXIsNext(!xIsNext);
 
-    // determine if any of the BigSquares have been won with the SmallSquares update
-    // TODO: add appropriate icon image overlay to indicate who won the BigSquare
-    const winner = calculateWin(nextSmallSquares);
+    // determine if any of the BigSquares have been won with the SmallSquaresArray update
+    const winner = calculateWin(nextSmallSquaresArray);
+
     if (winner !== null) {
-      // reset next valid square so any options are available
-      setNextValidSquare(null);
       // determine if game has been won
       calculateGameResults(bigSquareId, winner);
-    } else {
-      // if BigSquare of the same id as SmallSquare is already taken, open options to all valid squares
-      if (bigSquareOccupied(id)) {
+      if (id === bigSquareId) {
         setNextValidSquare(null);
-      } else {
-        setNextValidSquare(id);
+        return;
       }
+    }
+
+    // if BigSquare of the same id as SmallSquare is already taken, open options to all valid squares
+    if (bigSquareOccupied(id)) {
+      setNextValidSquare(null);
+    } else {
+      setNextValidSquare(id);
+    }
+  }
+
+  function SquareColor(): string {
+    if (bigSquareOccupied(bigSquareId) === "X") {
+      return "bg-red-200";
+    } else if (bigSquareOccupied(bigSquareId) === "O") {
+      return "bg-blue-300";
+    } else if (nextValidSquare !== bigSquareId && nextValidSquare !== null) {
+      return "bg-gray-500";
+    } else if (gameWinner) {
+      return "bg-gray-500";
+    } else {
+      return "bg-white";
     }
   }
 
   return (
     <div
-      className={`${
-        nextValidSquare === bigSquareId && !bigSquareOccupied(bigSquareId)
-          ? "bg-green-200"
-          : ""
-      } ${
-        bigSquareOccupied(bigSquareId) ? "bg-red-200" : ""
-      } grid grid-cols-3 grid-rows-3 bg-white p-2 gap-1 w-full`}
+      className={`${SquareColor()} grid grid-cols-3 grid-rows-3 p-2 gap-1 w-full relative`}
     >
       {THREE_BY_THREE_ARRAY.map((row) =>
         row.map((cell) => {
@@ -79,10 +105,16 @@ function BigSquare({
               key={cell}
               handleClick={handleClick}
             >
-              {smallSquares[cell]}
+              {smallSquaresArray[cell]}
             </SmallSquare>
           );
         })
+      )}
+      {bigSquareOccupied(bigSquareId) === "X" && (
+        <X className="absolute w-full h-full opacity-50" color={"red"} />
+      )}
+      {bigSquareOccupied(bigSquareId) === "O" && (
+        <Circle className="absolute w-full h-full opacity-50" color={"blue"} />
       )}
     </div>
   );

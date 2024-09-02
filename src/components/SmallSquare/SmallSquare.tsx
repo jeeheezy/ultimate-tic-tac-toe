@@ -20,9 +20,14 @@ function SmallSquare({
   //   React.useContext<NextValidSquareContextType>(NextValidSquareContext);
   // const cannotPlay = nextValidSquare !== null && bigSquareId !== nextValidSquare;
 
+  // if I want to make hover indicate the next player's turn
+  // is children unpopulated
+  // is bigSquare valid
+  // if both conditions are met, create element of whatever turns next and style with CSS on hover, and otherwise default display none
+
   return (
     <button
-      className="aspect-square bg-gray-300 w-full"
+      className="aspect-square bg-gray-300 w-6 sm:w-11 sm:focus:outline sm:outline-2 sm:text-3xl"
       onClick={() => handleClick(id, bigSquareId)}
       // disabled={cannotPlay}
     >
