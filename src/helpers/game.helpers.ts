@@ -16,5 +16,6 @@ export function calculateWin(board: Array<string | null>) {
       return board[a];
     }
   }
+  // TODO: include logic on handling stalemates
   return null;
 }
