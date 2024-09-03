@@ -16,6 +16,13 @@ export function calculateWin(board: Array<string | null>) {
       return board[a];
     }
   }
-  // TODO: include logic on handling stalemates
+
+  const filteredBoard = board.filter((square) => typeof square === "number");
+  if (filteredBoard.length == board.length) {
+    return "stalemate";
+  }
+
   return null;
 }
+
+// TODO: include logic on handling stalemates

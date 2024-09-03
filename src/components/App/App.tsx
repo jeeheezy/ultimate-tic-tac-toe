@@ -86,6 +86,8 @@ function App() {
           <h2 className="sm:text-3xl">
             {winner === null
               ? `Current Player: ${xIsNext ? "X" : "O"}`
+              : winner === "stalemate"
+              ? "Stalemate"
               : `Winner: ${winner}`}
           </h2>
           <Modal

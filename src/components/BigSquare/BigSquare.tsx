@@ -61,7 +61,7 @@ function BigSquare({
     // determine if any of the BigSquares have been won with the SmallSquaresArray update
     const winner = calculateWin(nextSmallSquaresArray);
 
-    if (winner !== null) {
+    if (winner !== null && winner !== "stalemate") {
       // determine if game has been won
       calculateGameResults(bigSquareId, winner);
       if (id === bigSquareId) {
@@ -71,7 +71,7 @@ function BigSquare({
     }
 
     // if BigSquare of the same id as SmallSquare is already taken, open options to all valid squares
-    if (bigSquareOccupied(id)) {
+    if (bigSquareOccupied(id) || winner == "stalemate") {
       setNextValidSquare(null);
     } else {
       setNextValidSquare(id);
