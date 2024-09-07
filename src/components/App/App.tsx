@@ -1,11 +1,13 @@
 import React from "react";
 import "./App.css";
 import { HelpCircle, RefreshCw as Restart } from "react-feather";
+import { animated } from "react-spring";
 import BigSquare from "../BigSquare";
+import Modal from "../Modal";
 import { THREE_BY_THREE_ARRAY } from "../../constants";
 import { calculateWin } from "../../helpers/game.helpers";
 import useToggle from "../../hooks/use-toggle";
-import Modal from "../Modal";
+import useBoop from "../../hooks/use-boop";
 
 export type NextValidSquareContextType = {
   nextValidSquare: number | null;
@@ -37,6 +39,8 @@ function App() {
   const [winner, setWinner] = React.useState<string | null>(null);
   const [newGame, setNewGame] = React.useState<boolean>(false);
   const [isModalOpen, toggleIsModalOpen] = useToggle(false);
+  const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
+  const [boopStyle, boopTrigger] = useBoop({ y: -10 });
 
   function bigSquareOccupied(i: number) {
     return bigSquaresArray[i];
@@ -67,7 +71,13 @@ function App() {
       return;
     }
 
-    setNewGame(false);
+    const timeoutId = window.setTimeout(() => {
+      setNewGame(false);
+    }, 500);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [newGame]);
 
   return (
@@ -79,7 +89,11 @@ function App() {
         <div className="flex flex-row justify-between items-center mb-3">
           <button
             onClick={handleRestart}
-            className="aspect-square border-none bg-white"
+            onMouseEnter={() => setIsAnimating(true)}
+            onAnimationEnd={() => setIsAnimating(false)}
+            className={`aspect-square border-none bg-white ${
+              isAnimating ? "rotate-on-hover" : ""
+            }`}
           >
             <Restart />
           </button>
@@ -132,8 +146,11 @@ function App() {
           <button
             onClick={toggleIsModalOpen}
             className="aspect-square border-none bg-white"
+            onMouseEnter={boopTrigger}
           >
-            <HelpCircle />
+            <animated.span style={boopStyle}>
+              <HelpCircle />
+            </animated.span>
           </button>
         </div>
 
