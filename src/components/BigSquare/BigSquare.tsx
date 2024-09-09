@@ -30,6 +30,8 @@ function BigSquare({
   const { nextValidSquare, setNextValidSquare } =
     React.useContext<NextValidSquareContextType>(NextValidSquareContext);
 
+  // not good to have Effect keep a state control another state, but alternative is to lift smallSquaresArray state
+  // up to App, which would lose benefit of modularity, unsure of what other methods to use while retaining recursiveness
   React.useEffect(() => {
     if (newGame) {
       setSmallSquaresArray(Array(9).fill(null));
