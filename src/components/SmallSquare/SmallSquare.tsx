@@ -15,11 +15,6 @@ function SmallSquare({
   handleClick,
   children,
 }: SmallSquareProps) {
-  // TODO: add additional layer of security by disabling buttons, hopefully helpful for accessibility
-  // const { nextValidSquare } =
-  //   React.useContext<NextValidSquareContextType>(NextValidSquareContext);
-  // const cannotPlay = nextValidSquare !== null && bigSquareId !== nextValidSquare;
-
   // if I want to make hover indicate the next player's turn
   // is children unpopulated
   // is bigSquare valid

@@ -2,8 +2,8 @@ import React from "react";
 import SmallSquare from "../SmallSquare";
 import { THREE_BY_THREE_ARRAY } from "../../constants";
 import { calculateWin } from "../../helpers/game.helpers";
-import { TurnContext, TurnContextType } from "../App";
-import { NextValidSquareContext, NextValidSquareContextType } from "../App";
+import { TurnContext, TurnContextType } from "../Game";
+import { NextValidSquareContext, NextValidSquareContextType } from "../Game";
 
 import { X, Circle } from "react-feather";
 
@@ -39,6 +39,7 @@ function BigSquare({
   }, [newGame]);
 
   function handleClick(id: number, bigSquareId: number) {
+    // should add in accessibility when nothing happens on click
     if (
       smallSquaresArray[id] || // check if SmallSquare is already taken
       bigSquareOccupied(bigSquareId) || // check if the BigSquare the SmallSquare belongs to is already taken
