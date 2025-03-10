@@ -1,4 +1,3 @@
-import * as React from "react";
 import { GitHub } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import { animated } from "react-spring";
