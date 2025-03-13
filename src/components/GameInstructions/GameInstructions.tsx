@@ -28,9 +28,9 @@ function GameInstructions() {
         handleDismiss={() => toggleIsModalOpen()}
       >
         <p>
-          Ultimate tic-tac-toe is a variation and more strategic version of tic
-          tac toe that allows for more dynamic and strategic gameplay. This is
-          designed for 2 main players (which can be individuals or groups).
+          Ultimate tic-tac-toe is a variation of tic tac toe that allows for
+          more dynamic and strategic gameplay. This is designed for 2 main
+          players (which can be individuals or groups).
         </p>
         <h2 className="text-md mt-2 font-bold">Goal</h2>
         <p>
@@ -46,7 +46,7 @@ function GameInstructions() {
           <li>
             Whichever square the first player places in a small tic tac toe
             determine the square of the large tic tac toe the next player gets
-            to place their shape. They are confied to that small tic tac toe
+            to place their shape. They are confined to that small tic tac toe
             ONLY.
           </li>
           <li>

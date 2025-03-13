@@ -22,7 +22,13 @@ export const TurnContext = React.createContext<TurnContextType>(
   {} as TurnContextType
 );
 
-function Game() {
+function Game({
+  newGame,
+  setNewGame,
+}: {
+  newGame: boolean;
+  setNewGame: () => void;
+}) {
   const [nextValidSquare, setNextValidSquare] = React.useState<number | null>(
     null
   );
@@ -31,7 +37,6 @@ function Game() {
     Array(9).fill(null)
   );
   const [winner, setWinner] = React.useState<string | null>(null);
-  const [newGame, setNewGame] = React.useState<boolean>(false);
 
   function bigSquareOccupied(i: number) {
     return bigSquaresArray[i];
@@ -48,28 +53,27 @@ function Game() {
     }
   }
 
-  // function handleRestart() {
-  //   setBigSquaresArray(Array(9).fill(null));
-  //   setWinner(null);
-  //   setNextValidSquare(null);
-  //   setXIsNext(false);
-  //   setNewGame(true);
-  //   // need to reset small squares as well, do I need to lift the SmallSquares Array state?
-  // }
+  function handleRestart() {
+    setBigSquaresArray(Array(9).fill(null));
+    setWinner(null);
+    setNextValidSquare(null);
+    setXIsNext(false);
+  }
 
   React.useEffect(() => {
     if (!newGame) {
       return;
     }
+    handleRestart();
 
     const timeoutId = window.setTimeout(() => {
-      setNewGame(false);
+      setNewGame();
     }, 500);
 
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [newGame]);
+  }, [newGame, setNewGame]);
 
   return (
     <NextValidSquareContext.Provider

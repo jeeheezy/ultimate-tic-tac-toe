@@ -9,6 +9,7 @@ import MenuButton from "../MenuButton";
 function LocalScreen() {
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
   const navigate = useNavigate();
+  const [newGame, setNewGame] = React.useState<boolean>(false);
 
   return (
     <>
@@ -16,6 +17,7 @@ function LocalScreen() {
 
       <div className="flex flex-row justify-between items-center mb-3">
         <button
+          onClick={() => setNewGame(true)}
           onMouseEnter={() => setIsAnimating(true)}
           onAnimationEnd={() => setIsAnimating(false)}
           className={`aspect-square border-none bg-white ${
@@ -24,10 +26,10 @@ function LocalScreen() {
         >
           <Restart />
         </button>
-        <h2 className="sm:text-3xl">Display Turn Here</h2>
+        {/* <h2 className="sm:text-3xl">Display Turn Here</h2> */}
         <GameInstructions />
       </div>
-      <Game />
+      <Game newGame={newGame} setNewGame={() => setNewGame(false)} />
       <MenuButton handleClick={() => navigate("/")}>Return Home</MenuButton>
     </>
   );
